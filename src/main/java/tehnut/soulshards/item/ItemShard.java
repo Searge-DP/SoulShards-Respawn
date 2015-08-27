@@ -2,12 +2,15 @@ package tehnut.soulshards.item;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import tehnut.soulshards.ModInformation;
+import tehnut.soulshards.SoulShardsReawakening;
 import tehnut.soulshards.enumeration.EnumTier;
 import tehnut.soulshards.util.helper.ShardHelper;
 
@@ -15,32 +18,47 @@ import java.util.List;
 
 public class ItemShard extends Item {
 
+    public IIcon[] icons = new IIcon[16];
+
     public ItemShard() {
         super();
 
-        setUnlocalizedName(ModInformation.ID + ".shard");
-        setTextureName("minecraft:emerald");
-        setCreativeTab(CreativeTabs.tabTools);
+        setUnlocalizedName(ModInformation.UNLOC + ".shard");
+        setCreativeTab(SoulShardsReawakening.tabSoulShards);
         setMaxStackSize(1);
     }
 
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister iconRegister) {
+        for (int i = 0; i < 6; i++)
+            icons[i] = iconRegister.registerIcon(ModInformation.DOMAIN + "shard_tier" + i);
+
+        icons[7] = iconRegister.registerIcon(ModInformation.DOMAIN + "shard_unbound");
+    }
+
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        EnumTier tier = ShardHelper.getTierFromShard(stack);
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(ItemStack stack, int pass) {
+        if (!ShardHelper.isBound(stack))
+            return icons[7];
 
-        if (tier != EnumTier.DEFAULT)
-            return super.getUnlocalizedName(stack) + "." + tier.toString();
-
-        return super.getUnlocalizedName(stack);
+        return icons[ShardHelper.getTierFromShard(stack).ordinal()];
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
+    public IIcon getIconIndex(ItemStack stack) {
+        if (!ShardHelper.isBound(stack))
+            return icons[7];
+
+        return icons[ShardHelper.getTierFromShard(stack).ordinal()];
+    }
+
+    @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
     public void getSubItems(Item item, CreativeTabs tabs, List list) {
         for (EnumTier tier : EnumTier.values())
-            if (tier != EnumTier.DEFAULT)
-                list.add(ShardHelper.setTierForShard(new ItemStack(this), tier));
-
-        list.add(ShardHelper.setKillsForShard(new ItemStack(this), 200));
+            list.add(ShardHelper.setTierForShard(new ItemStack(this), tier));
     }
 
     @Override
@@ -49,9 +67,15 @@ public class ItemShard extends Item {
     }
 
     @SideOnly(Side.CLIENT)
+    @SuppressWarnings("unchecked")
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean advanced) {
-        list.add(StatCollector.translateToLocalFormatted("tooltip.soulshards.shard.tier", ShardHelper.getTierFromShard(stack)));
-        list.add(StatCollector.translateToLocalFormatted("tooltip.soulshards.shard.kill", ShardHelper.getKillsFromShard(stack)));
+        if (ShardHelper.isBound(stack)) {
+            list.add(StatCollector.translateToLocalFormatted("tooltip.soulshards.shard.tier", ShardHelper.getTierFromShard(stack).toCasedString()));
+            list.add(StatCollector.translateToLocalFormatted("tooltip.soulshards.shard.kill", ShardHelper.getKillsFromShard(stack)));
+        }
+        else {
+            list.add(StatCollector.translateToLocalFormatted("tooltip.soulshards.shard.unbound", ShardHelper.getKillsFromShard(stack)));
+        }
     }
 }

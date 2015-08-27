@@ -9,7 +9,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import tehnut.soulshards.ModInformation;
+import tehnut.soulshards.SoulShardsReawakening;
 import tehnut.soulshards.enumeration.EnumTier;
+import tehnut.soulshards.item.ItemShard;
 import tehnut.soulshards.registry.ItemRegistry;
 import tehnut.soulshards.tile.TileEntitySpawner;
 import tehnut.soulshards.util.helper.ShardHelper;
@@ -19,9 +21,9 @@ public class BlockSpawner extends BlockContainer {
     public BlockSpawner() {
         super(Material.iron);
 
-        setBlockName(ModInformation.ID + ".spawner");
+        setBlockName(ModInformation.UNLOC + ".spawner");
         setBlockTextureName("minecraft:mob_spawner");
-        setCreativeTab(CreativeTabs.tabTools);
+        setCreativeTab(SoulShardsReawakening.tabSoulShards);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class BlockSpawner extends BlockContainer {
                     }
                 }
             } else if (player.getHeldItem().getItem() == ItemRegistry.shard) {
-                if (spawner.getShardTier() == EnumTier.DEFAULT) {
+                if (spawner.getShardTier() == EnumTier.DEFAULT && ShardHelper.getTierFromShard(player.getHeldItem()) != EnumTier.DEFAULT) {
                     if (!world.isRemote) {
                         spawner.setShardTier(ShardHelper.getTierFromShard(player.getHeldItem()));
                         spawner.setShardIn(player.getHeldItem());

@@ -2,6 +2,7 @@ package tehnut.soulshards.enumeration;
 
 import lombok.Getter;
 import net.minecraft.world.World;
+import tehnut.soulshards.ConfigHandler;
 import tehnut.soulshards.util.Bound;
 
 import java.util.Locale;
@@ -10,37 +11,37 @@ import java.util.Locale;
 public enum EnumTier {
 
     ZERO(Bound.of(0, 0)),
-    ONE(Bound.of(64, 127)) {
+    ONE(Bound.of(ConfigHandler.killRequirement[0], ConfigHandler.killRequirement[1] - 1)) {
         @Override
         void trySpawn(World world, int x, int y, int z) {
 
         }
     },
-    TWO(Bound.of(128, 255)) {
+    TWO(Bound.of(ConfigHandler.killRequirement[1], ConfigHandler.killRequirement[2] - 1)) {
         @Override
         void trySpawn(World world, int x, int y, int z) {
 
         }
     },
-    THREE(Bound.of(256, 511)) {
+    THREE(Bound.of(ConfigHandler.killRequirement[2], ConfigHandler.killRequirement[3] - 1)) {
         @Override
         void trySpawn(World world, int x, int y, int z) {
 
         }
     },
-    FOUR(Bound.of(512, 1023)) {
+    FOUR(Bound.of(ConfigHandler.killRequirement[3], ConfigHandler.killRequirement[4] - 1)) {
         @Override
         void trySpawn(World world, int x, int y, int z) {
 
         }
     },
-    FIVE(Bound.of(1024, 1024)) {
+    FIVE(Bound.of(ConfigHandler.killRequirement[4], ConfigHandler.killRequirement[4])) {
         @Override
         void trySpawn(World world, int x, int y, int z) {
 
         }
     },
-    DEFAULT(Bound.of(0, 0));
+    DEFAULT(Bound.of(-1, -1));
 
     Bound<Integer> bound;
 

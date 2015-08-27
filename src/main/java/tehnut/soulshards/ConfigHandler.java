@@ -10,6 +10,8 @@ public class ConfigHandler {
     public static Configuration config;
 
     // Settings
+    public static boolean enableConsoleLogging;
+
     public static int[] killRequirement = { 64, 128, 256, 512, 1024 };
     public static int[] maxSpawns = { 2, 4, 4, 4, 6 };
     public static int[] spawnDelay = { 400, 200, 100, 100, 50 };
@@ -30,6 +32,7 @@ public class ConfigHandler {
 
         category = "General";
         config.addCustomCategoryComment(category, "General settings that don't fit elsewhere.");
+        enableConsoleLogging = config.getBoolean("enableConsoleLogging", category, true, "Allows the mod to log things to the console. Keeping this enabled will allow support to go much smoother.");
 
         category = "Tiers";
         config.addCustomCategoryComment(category, "Settings for each individual tier.");

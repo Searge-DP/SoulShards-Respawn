@@ -121,4 +121,11 @@ public class ShardHelper {
     public static ItemStack increaseKillCount(ItemStack stack) {
         return increaseKillCount(stack, 1);
     }
+
+    public static boolean isBound(ItemStack stack) {
+        if (stack.getTagCompound() == null)
+            stack.stackTagCompound = new NBTTagCompound();
+
+        return stack.getTagCompound().getInteger(NBT_KILL) > 0 || getTierFromShard(stack) != EnumTier.DEFAULT;
+    }
 }
