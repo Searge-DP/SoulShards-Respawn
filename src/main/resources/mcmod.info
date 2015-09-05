@@ -1,14 +1,14 @@
 [
   {
-    "modid": "ResourcefulCrops",
-    "name": "ResourcefulCrops",
-    "description": "Simply JSON based resource crops.",
+    "modid": "SoulShardsRespawn",
+    "name": "SoulShards - Respawn",
+    "description": "A fresh codebase fan continuation of the 1.4.7 version of Soul Shards.",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "http://tehnut.info/",
     "updateUrl": "http://tehnut.info/jenkins/",
     "authorList": [ "TehNut" ],
-    "credits": "Rhodox, BBoldt, and Ganzu for textures",
+    "credits": "SgtPunishment and the rest of TeamWhammich",
     "logoFile": "",
     "screenshots": [ ]
   }

@@ -2,8 +2,8 @@ package tehnut.soulshards;
 
 public class ModInformation {
 
-    public static final String ID = "SoulShardsReawakening";
-    public static final String NAME = "SoulShards - Reawakening";
+    public static final String ID = "SoulShardsRespawn";
+    public static final String NAME = "SoulShards - Respawn";
     public static final String UNLOC = "soulshards";
     public static final String DOMAIN = "soulshards:";
     public static final String VERSION = "@VERSION@";

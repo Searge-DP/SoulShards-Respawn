@@ -2,16 +2,13 @@ package tehnut.soulshards.block;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import tehnut.soulshards.ModInformation;
-import tehnut.soulshards.SoulShardsReawakening;
+import tehnut.soulshards.SoulShardsRespawn;
 import tehnut.soulshards.enumeration.EnumTier;
-import tehnut.soulshards.item.ItemShard;
 import tehnut.soulshards.registry.ItemRegistry;
 import tehnut.soulshards.tile.TileEntitySpawner;
 import tehnut.soulshards.util.helper.ShardHelper;
@@ -23,7 +20,7 @@ public class BlockSpawner extends BlockContainer {
 
         setBlockName(ModInformation.UNLOC + ".spawner");
         setBlockTextureName("minecraft:mob_spawner");
-        setCreativeTab(SoulShardsReawakening.tabSoulShards);
+        setCreativeTab(SoulShardsRespawn.tabSoulShards);
     }
 
     @Override
@@ -32,31 +29,22 @@ public class BlockSpawner extends BlockContainer {
 
         if (tile instanceof TileEntitySpawner) {
             TileEntitySpawner spawner = (TileEntitySpawner) tile;
-            EnumTier tier = spawner.getShardTier();
+            ItemStack held = player.getHeldItem();
 
-            if (player.getHeldItem() == null) {
-                if (player.isSneaking() && !world.isRemote) {
-                    if (tier != EnumTier.DEFAULT) {
-                        player.inventory.addItemStackToInventory(spawner.getShardIn());
-                        spawner.resetTier();
+            if (held != null) {
+                if (held.getItem() == ItemRegistry.shard) {
+                    if (ShardHelper.getTierFromShard(held) != EnumTier.UNBOUND && ShardHelper.getTierFromShard(held) != EnumTier.ZERO && ShardHelper.hasEntity(held)) {
+                        if (spawner.getStackInSlot(0) == null) {
+                            player.inventory.decrStackSize(player.inventory.currentItem, 1);
+                            spawner.setInventorySlotContents(0, held);
+                            return true;
+                        }
                     }
                 }
-            } else if (player.getHeldItem().getItem() == ItemRegistry.shard) {
-                if (spawner.getShardTier() == EnumTier.DEFAULT && ShardHelper.getTierFromShard(player.getHeldItem()) != EnumTier.DEFAULT) {
-                    if (!world.isRemote) {
-                        spawner.setShardTier(ShardHelper.getTierFromShard(player.getHeldItem()));
-                        spawner.setShardIn(player.getHeldItem());
-                        player.inventory.decrStackSize(player.inventory.currentItem, 1);
-                    }
-                    player.swingItem();
-                }
-            } else if (player.getHeldItem().getItem() == Items.diamond_hoe) {
-                if (!world.isRemote) {
-                    player.addChatComponentMessage(new ChatComponentText("Tier " + spawner.getShardTier()));
-                    player.addChatComponentMessage(new ChatComponentText("Item " + spawner.getShardIn().getDisplayName()));
-                    player.addChatComponentMessage(new ChatComponentText("Item-Kills " + ShardHelper.getKillsFromShard(spawner.getShardIn())));
-                    player.addChatComponentMessage(new ChatComponentText("Item-Tier " + ShardHelper.getTierFromShard(spawner.getShardIn())));
-                    player.addChatComponentMessage(new ChatComponentText("Item-Entity " + ShardHelper.getShardEntity(spawner.getShardIn())));
+            } else if (player.isSneaking()) {
+                if (spawner.getStackInSlot(0) != null) {
+                    player.inventory.addItemStackToInventory(spawner.getStackInSlot(0));
+                    spawner.setInventorySlotContents(0, null);
                 }
             }
         }
@@ -73,11 +61,6 @@ public class BlockSpawner extends BlockContainer {
     public boolean renderAsNormalBlock() {
         return false;
     }
-
-//    @Override
-//    public int getRenderType() {
-//        return BanterTokens.renderIDSpawner;
-//    }
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {

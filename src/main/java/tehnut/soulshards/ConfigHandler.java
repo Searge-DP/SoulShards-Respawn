@@ -10,7 +10,14 @@ public class ConfigHandler {
     public static Configuration config;
 
     // Settings
+    public static boolean allowBossSpawners;
+    public static int soulStealerBonus;
+    public static int soulStealerWeight;
+
     public static boolean enableConsoleLogging;
+    public static boolean enableVerboseErrorReporting;
+
+    public static int soulStealerEnchantID;
 
     public static int[] killRequirement = { 64, 128, 256, 512, 1024 };
     public static int[] maxSpawns = { 2, 4, 4, 4, 6 };
@@ -29,10 +36,18 @@ public class ConfigHandler {
 
         category = "Balance";
         config.addCustomCategoryComment(category, "General balancing tweaks.");
+        allowBossSpawners = config.getBoolean("allowBossSpawners", category, false, "Allows spawners to be created for bosses. You will not have a good day.");
+        soulStealerBonus = config.getInt("soulStealerBonus", category, 52, 1, 10, "Bonus multiplier for the Soul Stealer enchantment. The formula is: Base + (Level * Bonus)");
+        soulStealerWeight = config.getInt("soulStealerWeight", category, 8, 1, 10, "The weight of the Soul Stealer enchantment in the enchanting table.");
 
         category = "General";
         config.addCustomCategoryComment(category, "General settings that don't fit elsewhere.");
         enableConsoleLogging = config.getBoolean("enableConsoleLogging", category, true, "Allows the mod to log things to the console. Keeping this enabled will allow support to go much smoother.");
+        enableVerboseErrorReporting = config.getBoolean("enableVerboseErrorReporting", category, false, "If you need to find out where something went wrong, enable this. Errors will be logged much more frequently.");
+
+        category = "Internal";
+        config.addCustomCategoryComment(category, "Settings to be used internally such as ID's.");
+        soulStealerEnchantID = config.getInt("soulStealerEnchantID", category, 102, 0, 255, "ID to use for the Soul Stealer enchantment.");
 
         category = "Tiers";
         config.addCustomCategoryComment(category, "Settings for each individual tier.");

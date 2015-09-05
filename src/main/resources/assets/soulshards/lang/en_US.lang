@@ -1,8 +1,9 @@
 # Creative Tab
-itemGroup.soulshards.creativeTab=Soul Shards - Reawakened
+itemGroup.soulshards.creativeTab=Soul Shards - Respawn
 
 # Blocks
 tile.soulshards.spawner.name=Soul Cage
+tile.soulshards.soul.forge.name=Soul Forge
 
 # Items
 item.soulshards.shard.name=Soul Shard
@@ -10,4 +11,5 @@ item.soulshards.shard.name=Soul Shard
 # Tooltips
 tooltip.soulshards.shard.tier=Tier: %s
 tooltip.soulshards.shard.kill=Kills: %s
+tooltip.soulshards.shard.entity=Bound to: %s
 tooltip.soulshards.shard.unbound=Unbound

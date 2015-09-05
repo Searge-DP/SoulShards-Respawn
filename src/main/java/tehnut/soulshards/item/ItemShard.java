@@ -7,10 +7,11 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import tehnut.soulshards.ModInformation;
-import tehnut.soulshards.SoulShardsReawakening;
+import tehnut.soulshards.SoulShardsRespawn;
 import tehnut.soulshards.enumeration.EnumTier;
 import tehnut.soulshards.util.helper.ShardHelper;
 
@@ -24,7 +25,7 @@ public class ItemShard extends Item {
         super();
 
         setUnlocalizedName(ModInformation.UNLOC + ".shard");
-        setCreativeTab(SoulShardsReawakening.tabSoulShards);
+        setCreativeTab(SoulShardsRespawn.tabSoulShards);
         setMaxStackSize(1);
     }
 
@@ -73,6 +74,8 @@ public class ItemShard extends Item {
         if (ShardHelper.isBound(stack)) {
             list.add(StatCollector.translateToLocalFormatted("tooltip.soulshards.shard.tier", ShardHelper.getTierFromShard(stack).toCasedString()));
             list.add(StatCollector.translateToLocalFormatted("tooltip.soulshards.shard.kill", ShardHelper.getKillsFromShard(stack)));
+            if (ShardHelper.hasEntity(stack))
+                list.add(StatCollector.translateToLocalFormatted("tooltip.soulshards.shard.entity", ShardHelper.getEntityFromShard(stack)));
         }
         else {
             list.add(StatCollector.translateToLocalFormatted("tooltip.soulshards.shard.unbound", ShardHelper.getKillsFromShard(stack)));

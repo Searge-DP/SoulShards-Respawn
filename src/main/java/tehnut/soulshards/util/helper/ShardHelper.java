@@ -19,7 +19,7 @@ public class ShardHelper {
             stack.stackTagCompound = new NBTTagCompound();
 
         int kills = getKillsFromShard(stack);
-        EnumTier ret = EnumTier.DEFAULT;
+        EnumTier ret = EnumTier.UNBOUND;
 
         for (EnumTier tier : EnumTier.values())
             if (boundContainsKills(tier.getBound(), kills))
@@ -36,30 +36,45 @@ public class ShardHelper {
     }
 
     public static boolean holdingShard(EntityPlayer player) {
-        IInventory inventory = player.inventory;
-
-        for (int slot = 0; slot < inventory.getSizeInventory(); slot++)
-            if (inventory.getStackInSlot(slot).getItem() == ItemRegistry.shard)
-                return true;
-
-        return false;
+        return player.inventory.hasItem(ItemRegistry.shard);
     }
 
-    public static int getShardLocation(EntityPlayer player) {
-        IInventory inventory = player.inventory;
-
-        for (int slot = 0; slot < inventory.getSizeInventory(); slot++)
-            if (inventory.getStackInSlot(slot).getItem() == ItemRegistry.shard)
+    public static int getFirstShard(IInventory inventory) {
+        for (int slot = 0; slot < inventory.getSizeInventory(); ++slot)
+            if (inventory.getStackInSlot(slot)!= null && inventory.getStackInSlot(slot).getItem() == ItemRegistry.shard)
                 return slot;
 
-        return Integer.MAX_VALUE;
+        return -1;
+    }
+
+    public static int getFirstShardForEntity(IInventory inventory, String entity) {
+        for (int slot = 0; slot < inventory.getSizeInventory(); ++slot)
+            if (inventory.getStackInSlot(slot)!= null && inventory.getStackInSlot(slot).getItem() == ItemRegistry.shard) {
+                if (hasEntity(inventory.getStackInSlot(slot)) && getEntityFromShard(inventory.getStackInSlot(slot)).equals(entity))
+                    return slot;
+            }
+
+        return -1;
     }
 
     public static ItemStack getShardStackFromPlayer(EntityPlayer player) {
-        return player.inventory.getStackInSlot(getShardLocation(player));
+        return holdingShard(player) ? player.inventory.getStackInSlot(getFirstShard(player.inventory)) : null;
     }
 
-    public static String getShardEntity(ItemStack stack) {
+    public static ItemStack getShardStackWithEntity(EntityPlayer player, String entity) {
+        for (int slot = 0; slot < player.inventory.getSizeInventory(); ++slot) {
+            ItemStack slotStack = player.inventory.getStackInSlot(slot);
+
+            if (slotStack != null && slotStack.getItem() == ItemRegistry.shard) {
+                if (getEntityFromShard(slotStack).equals(entity))
+                    return slotStack;
+            }
+        }
+
+        return null;
+    }
+
+    public static String getEntityFromShard(ItemStack stack) {
         if (stack.getTagCompound() == null)
             stack.stackTagCompound = new NBTTagCompound();
 
@@ -76,7 +91,7 @@ public class ShardHelper {
         return ret;
     }
 
-    public static ItemStack setKillsForShard(ItemStack stack, int kills) {
+    private static ItemStack setKillsForShard(ItemStack stack, int kills) {
         if (stack.getTagCompound() == null)
             stack.stackTagCompound = new NBTTagCompound();
 
@@ -96,11 +111,11 @@ public class ShardHelper {
         return ret;
     }
 
-    public static boolean isShardBound(ItemStack stack) {
+    public static boolean hasEntity(ItemStack stack) {
         if (stack.getTagCompound() == null)
             stack.stackTagCompound = new NBTTagCompound();
 
-        return Strings.isNullOrEmpty(stack.getTagCompound().getString(NBT_ENTITY));
+        return !Strings.isNullOrEmpty(stack.getTagCompound().getString(NBT_ENTITY));
     }
 
     public static boolean boundContainsKills(Bound<Integer> bound, int kills) {
@@ -112,8 +127,8 @@ public class ShardHelper {
             stack.stackTagCompound = new NBTTagCompound();
 
         ItemStack ret = stack.copy();
-        int kills = getKillsFromShard(stack);
-        setKillsForShard(ret, kills + amount);
+        int kills = getKillsFromShard(ret);
+        ret = setKillsForShard(ret, kills + amount);
 
         return ret;
     }
@@ -126,6 +141,6 @@ public class ShardHelper {
         if (stack.getTagCompound() == null)
             stack.stackTagCompound = new NBTTagCompound();
 
-        return stack.getTagCompound().getInteger(NBT_KILL) > 0 || getTierFromShard(stack) != EnumTier.DEFAULT;
+        return stack.getTagCompound().getInteger(NBT_KILL) > 0 || getTierFromShard(stack) != EnumTier.UNBOUND;
     }
 }
