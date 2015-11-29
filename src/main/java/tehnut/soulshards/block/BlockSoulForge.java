@@ -58,6 +58,12 @@ public class BlockSoulForge extends BlockContainer {
     }
 
     @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
+        player.openGui(SoulShardsRespawn.instance, 0, world, x, y, z);
+        return true;
+    }
+
+    @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
         int dir = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 

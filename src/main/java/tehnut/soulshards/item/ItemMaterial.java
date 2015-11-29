@@ -37,11 +37,11 @@ public class ItemMaterial extends Item {
 
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister iconRegister) {
-        this.icon[0] = iconRegister.registerIcon(ModInformation.DOMAIN + ":nuggetSoulium");
-        this.icon[1] = iconRegister.registerIcon(ModInformation.DOMAIN + ":ingotSoulium");
-        this.icon[2] = iconRegister.registerIcon(ModInformation.DOMAIN + ":dustVile");
-        this.icon[3] = iconRegister.registerIcon(ModInformation.DOMAIN + ":essenceCorrupted");
-        this.icon[4] = iconRegister.registerIcon(ModInformation.DOMAIN + ":stickPetrified");
+        this.icon[0] = iconRegister.registerIcon(ModInformation.DOMAIN + "nuggetSoulium");
+        this.icon[1] = iconRegister.registerIcon(ModInformation.DOMAIN + "ingotSoulium");
+        this.icon[2] = iconRegister.registerIcon(ModInformation.DOMAIN + "dustVile");
+        this.icon[3] = iconRegister.registerIcon(ModInformation.DOMAIN + "essenceCorrupted");
+        this.icon[4] = iconRegister.registerIcon(ModInformation.DOMAIN + "stickPetrified");
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})

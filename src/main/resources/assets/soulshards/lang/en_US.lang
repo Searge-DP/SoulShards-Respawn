@@ -13,3 +13,6 @@ tooltip.soulshards.shard.tier=Tier: %s
 tooltip.soulshards.shard.kill=Kills: %s
 tooltip.soulshards.shard.entity=Bound to: %s
 tooltip.soulshards.shard.unbound=Unbound
+
+# Gui
+gui.soulshards.forge.name=Soul Forge

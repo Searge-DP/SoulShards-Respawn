@@ -7,6 +7,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -71,7 +72,7 @@ public class SoulShardsRespawn {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-
+        NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
     }
 
     @Mod.EventHandler
